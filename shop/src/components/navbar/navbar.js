@@ -3,7 +3,7 @@ import s from "./navbar.module.css"
 import { Link } from "react-router-dom"
 
 const Navbar = (props) => {
-  const { val, setVal, searchClick, homeClick } = props
+  const { val, setVal, searchClick, homeClick, user, logout } = props
   const keyPress = e => e.key === "Enter" ? searchClick() : null
   return (
     <nav className={s.navbar}>
@@ -19,9 +19,13 @@ const Navbar = (props) => {
             >Search</button>
           </div>
           <div className={s.form_auth}>
-            <h2>Logout</h2>
-            <Link to="/login"><button type='submit' className={s.btn1}>Login</button></Link>
-            <Link to="/register"><button type='submit' className={s.btn1}>Register</button></Link>
+            {
+              user ?
+                <h2 onClick={logout}>logout</h2> :
+                <>
+                  <Link to="/login"><button type='submit' className={s.btn1}>Login</button></Link>
+                  <Link to="/register"><button type='submit' className={s.btn1}>Register</button></Link></>
+            }
           </div>
         </ul>
       </div>

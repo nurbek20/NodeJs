@@ -5,15 +5,16 @@ import { useForm } from "react-hook-form";
 import services from '../../server/services';
 
 
-const Login = () => {
+const Login = (props) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
     const onSubmit = async (data) => {
         const object = {
             email: data.email,
             password: data.password
         }
-        const doc = await services.login(object)
-        console.log("login>>>", doc)
+        await services.login(object).then(res => {
+                props.getMe(res.data)
+            }).catch(e => console.log(e))
     }
 
     return (
@@ -22,7 +23,7 @@ const Login = () => {
                 <div className='container'>
                     <div className={s.form__content}>
                         <div className={s.form}>
-                            <form  onSubmit={handleSubmit(onSubmit)}>
+                            <form onSubmit={handleSubmit(onSubmit)}>
                                 <div>
                                     <input
                                         {...register("email", { required: "not empty" })}

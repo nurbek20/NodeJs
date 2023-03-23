@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Cart from "./cart/cart"
 import Home from './home/home';
 import { Routes, Route } from 'react-router-dom';
@@ -7,11 +7,29 @@ import Data from "../data/products.json";
 import { category } from "../category"
 import Login from '../components/auth/login';
 import Register from '../components/auth/register';
+import Cookies from 'js-cookie';
+import services from "../server/services"
 
 const Main = () => {
   const [data, setData] = useState(Data)
   const [card, setCard] = useState([])
   const [val, setVal] = useState("")
+  const [user, setUser] = useState("")
+
+  useEffect(()=>{
+    getMe()
+  },[user])
+
+  const getMe=async()=>{
+    await services.getMe().then(res =>{
+      setUser(res.data.fullName)
+    })
+  }
+
+  const logout=()=>{
+    setUser("")
+    Cookies.remove("token")
+  }
 
   const categoryClick = (elem) => {
     const filterData = Data.filter((item) => item.category === elem)
@@ -48,6 +66,8 @@ const Main = () => {
         val={val}
         searchClick={searchClick}
         homeClick={homeClick}
+        user={user}
+        logout={logout}
       />
       <Routes>
         <Route path="/" element={<Home
@@ -60,7 +80,7 @@ const Main = () => {
           card={card}
           deleteCard={deleteCard}
         />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login getMe={getMe} />} />
         <Route path="/register" element={<Register />} />
       </Routes>
 
