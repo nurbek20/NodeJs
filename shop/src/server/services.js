@@ -5,7 +5,12 @@ const register=(data)=>{
     return instance.post("users/register", data)
 }
 
+const login=(data)=>{
+    return instance.post("users/login", data)
+}
+
 const services={
-    register
+    register,
+    login
 }
 export default services

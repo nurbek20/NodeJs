@@ -3,9 +3,11 @@ import mongoose from "mongoose"
 import UserModel from "./models/User.js"
 import jwt from 'jsonwebtoken';
 import checkAuth from "./utils/checkAuth.js";
+import cors from "cors"
 
 const app = express()
 app.use(express.json())
+app.use(cors())
 
 mongoose
     .connect('mongodb+srv://admin:admin@cluster0.1pb1kpn.mongodb.net/users?retryWrites=true&w=majority')
